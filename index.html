@@ -484,7 +484,141 @@
     };
 
     // Start with one empty row
-    addRow();
+    <!DOCTYPE html>
+<html lang="nl">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>RI&E Kantoren – Invultemplate</title>
+  <style>
+    /* (styles blijven identiek aan vorige versie) */
+  </style>
+</head>
+<body>
+  <!-- (header en algemene secties blijven identiek) -->
+
+  <main class="wrap">
+    <!-- Secties 1-5 idem -->
+
+    <!-- 6. Resultaten inventarisatie & evaluatie (met onderwerpen uit PDF) -->
+    <section>
+      <h2>6. Resultaten inventarisatie & evaluatie</h2>
+      <div class="table-actions no-print" style="margin:6px 0;">
+        <button id="add-row">+ Regel toevoegen</button>
+        <button class="secondary" id="import-rows">Voorbeeldonderwerpen laden</button>
+      </div>
+      <div style="overflow:auto;">
+        <table id="rie-table">
+          <thead>
+            <tr>
+              <th>#</th><th>Onderwerp</th><th>Constatering / Risico / Knelpunt</th><th>W</th><th>B</th><th>E</th><th>R</th><th>Klasse</th><th>Advies / maatregel</th><th>Verantw.</th><th>Gereed</th><th class="no-print">Acties</th>
+            </tr>
+          </thead>
+          <tbody id="rie-body"></tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- 7. Plan van Aanpak idem -->
+
+  </main>
+
+  <script>
+    /* Zelfde JS als vorige versie, maar met uitgebreide EXAMPLES array uit hoofdstuk 7 van PDF */
+    const EXAMPLES = [
+      { onderwerp: 'Plan van Aanpak', constatering: 'Dit is de eerste RI&E binnen bedrijf. Taken en bevoegdheden duidelijk vastgelegd.', advies: 'Actualiseer Plan van Aanpak en betrek personeel.', W:'',B:'',E:'' },
+      { onderwerp: 'Verzuimbeleid', constatering: 'Verzuimprocedure aanwezig en gecommuniceerd.', advies: 'Geen actie nodig.' },
+      { onderwerp: 'Beleidsoverleg / Arbo in werkoverleg', constatering: 'Arbo geen vast agendapunt in werkoverleg.', advies: 'Periodiek actiepunten RI&E bespreken.', W:3,B:3,E:3 },
+      { onderwerp: 'Ondernemingsraad / PVT', constatering: 'PVT aanwezig en betrokken.', advies: 'Stel regeling op voor jaarlijkse voortgangsbespreking.' },
+      { onderwerp: 'Preventiemedewerker', constatering: 'Benoemd, maar TBV’s niet schriftelijk vastgelegd.', advies: 'Leg TBV’s vast en communiceer intern.' },
+      { onderwerp: 'AOS / PMO', constatering: 'Bedrijfsarts spreekuur beschikbaar.', advies: 'Continueer, borg toegang conform Arbowet.' },
+      { onderwerp: 'Bedrijfsongevallen', constatering: 'Geen ongevallen in afgelopen jaar.', advies: 'Continueren beleid.' },
+      { onderwerp: 'Beroepsziekten', constatering: 'Geen beroepsziekten gemeld.', advies: 'Continueren beleid en overleg met bedrijfsarts.' },
+      { onderwerp: 'Introductie & Voorlichting', constatering: 'Introductieprogramma aanwezig, BHV opleiding en oefeningen uitgevoerd.', advies: 'Continueren.' },
+      { onderwerp: 'Vertrouwenspersoon', constatering: 'Aanwezig, TBV’s vastgelegd.', advies: 'Jaarlijks evalueren.' },
+      { onderwerp: 'Bijzondere groepen', constatering: '>10% is ouder dan 55 jaar, beleid houdt rekening met belastbaarheid.', advies: 'Continueren beleid met aandacht voor ouderen.' },
+      { onderwerp: 'Arbo bij inkoop en verbouw', constatering: 'Niet expliciet in beleid.', advies: 'Blijvend aandachtspunt.' },
+      { onderwerp: 'Keuringen arbeidsmiddelen', constatering: 'NEN3140 keuringen geregeld.', advies: 'Continueren.' },
+      { onderwerp: 'BHV-organisatie & noodvoorzieningen', constatering: 'BHV opgeleid, enkele gebreken noodverlichting/blusser/nooddeur.', advies: 'Reparatie pictogram, ophangen blusser, nooddeuren vrijmaken, trapje markeren.' },
+      { onderwerp: 'Algemene voorzieningen', constatering: 'Voorzieningen in orde.', advies: 'Geen actie.' },
+      { onderwerp: 'Sanitair', constatering: 'Voldoende gescheiden sanitaire voorzieningen.', advies: 'Geen actie.' },
+      { onderwerp: 'Pauzeruimtes', constatering: 'Voldoende aanwezig.', advies: 'Geen actie.' },
+      { onderwerp: 'Schoonmaak & hygiëne', constatering: 'Geen knelpunten.', advies: 'Geen actie.' },
+      { onderwerp: 'Legionella / biologische agentia', constatering: 'Geen knelpunten.', advies: 'Geen actie.' },
+      { onderwerp: 'Verlichting', constatering: 'Voldoet aan normen.', advies: 'Geen actie.' },
+      { onderwerp: 'Zonwering', constatering: 'Aanwezig en toereikend.', advies: 'Geen actie.' },
+      { onderwerp: 'Werktijden', constatering: 'Vastgelegd en bekend.', advies: 'Continueren.' },
+      { onderwerp: 'Klimaat / ventilatie', constatering: 'Geen klachten, systemen op orde.', advies: 'Geen actie.' },
+      { onderwerp: 'Geluid', constatering: 'Geen hinderlijke niveaus, printers in kantoren.', advies: 'Plaats printers bij voorkeur buiten kantoren.' },
+      { onderwerp: 'Fysieke belasting', constatering: 'Voornamelijk beeldschermwerk.', advies: 'Stimuleer afwisseling houding/werkzaamheden.' },
+      { onderwerp: 'Beeldschermwerk', constatering: 'Langdurig werk, bureaus lastig instelbaar, kabels rommelig.', advies: 'Jaarlijkse werkplekrondgang, makkelijk instelbare bureaus aanschaffen, kabelmanagement toepassen.' },
+      { onderwerp: 'Register gevaarlijke stoffen', constatering: 'Geen registratie getoond.', advies: 'Maak register van gebruikte stoffen.' },
+      { onderwerp: 'VIB bladen', constatering: 'Niet aangetroffen.', advies: 'Vraag VIB’s op bij leverancier en beschikbaar houden.' },
+      { onderwerp: 'Opslag gevaarlijke stoffen', constatering: 'Opslag op aanrecht, risico contact levensmiddelen.', advies: 'Veilig opslaan, printers in aparte ruimte met ventilatie bij >5000 prints/maand.' },
+      { onderwerp: 'Psychosociale arbeidsbelasting', constatering: 'Geen actuele knelpunten, maar PSA aandachtspunt.', advies: 'Laat PSA-onderwerpen periodiek terugkomen in gesprekken en teamoverleggen.' },
+      { onderwerp: 'Functie-inhoud & afstemming', constatering: 'Goed werktempo, samenwerking goed.', advies: 'Continueren.' },
+      { onderwerp: 'Ontwikkeling / scholing', constatering: 'Functioneringsgesprekken en scholing aanwezig.', advies: 'Continueren.' },
+      { onderwerp: 'Communicatie & overleg', constatering: 'Voldoende overleg en zelfstandigheid.', advies: 'Continueren.' }
+    ];
+  
+    // Hoofdstuk 7 onderwerpen uit de PDF (samengevatte titels + kernbevindingen)
+    // Bron: door gebruiker verstrekte "RIE kantoren.pdf", hfst. 7.
+    if (!window.H7_TOPICS) {
+      const H7_TOPICS = [
+        {onderwerp:'Plan van Aanpak / Arbobeleid en organisatie', constatering:'Eerste RI&E; taken & bevoegdheden vastgelegd; PvA actualiseren.', advies:'Actualiseer PvA volgens rapport en betrek personeel.'},
+        {onderwerp:'Verzuimbeleid, -procedure en -registratie', constatering:'Beleid aanwezig; cijfers beschikbaar naar leeftijd/geslacht/afdeling.', advies:'Geen actie; periodiek blijven monitoren.'},
+        {onderwerp:'Beleidsoverleg / Arbo in werkoverleg', constatering:'Werkoverleg periodiek; Arbo geen vast agendapunt.', advies:'Neem PvA-actiepunten periodiek op in overleg.'},
+        {onderwerp:'Alcohol, drugs en medicijnen', constatering:'Verbod opgenomen in huisregels; op orde.', advies:'Continueren en jaarlijks evalueren.'},
+        {onderwerp:'Ondernemingsraad / PVT', constatering:'PVT aanwezig en betrokken bij RI&E.', advies:'Jaarlijks voortgang PvA met PVT bespreken.'},
+        {onderwerp:'Preventiemedewerker (formele aanwijzing)', constatering:'Formeel benoemd; taken/bevoegdheden vastleggen en afstemmen met bedrijfsarts.', advies:'Leg TBV’s vast en borg samenwerking met bedrijfsarts.'},
+        {onderwerp:'Arbeidsgezondheidskundig spreekuur & PMO', constatering:'Toegang tot bedrijfsarts ook preventief (nieuwe Arbowet).', advies:'Borg laagdrempelige toegang; privacy waarborgen.'},
+        {onderwerp:'Bedrijfsongevallen', constatering:'Geen ongevallen; registratie aanwezig.', advies:'Continueren en registreren.'},
+        {onderwerp:'Beroepsziekten', constatering:'Geen meldingen; melden is kerntaak bedrijfsarts.', advies:'Continueren; afstemmen over meldingen (bijv. VDU‑klachten).'},
+        {onderwerp:'Introductie / Voorlichting, Onderwijs en Instructie (VOI)', constatering:'Introprogramma en BHV‑opleiding aanwezig.', advies:'VOI continueren en bij RI&E‑acties aansluiten.'},
+        {onderwerp:'Vertrouwenspersoon & ongewenst gedrag', constatering:'Interne VP aanwezig; TBV vastgelegd; geen meldingen.', advies:'Jaarlijks evalueren; TBV’s bijstellen indien nodig.'},
+        {onderwerp:'Bijzondere groepen (55+ e.a.)', constatering:'Aandeel 55+; beleid houdt rekening met veranderende belastbaarheid.', advies:'Continueren en specifiek aandacht houden voor ouderen.'},
+        {onderwerp:'Arbo bij inkoop/ontwerp/verbouw', constatering:'Wordt meegewogen maar niet expliciet vastgelegd.', advies:'Maak arbo‑eisen expliciet in inkoopbeleid/ontwerp.'},
+        {onderwerp:'Beheersing risico’s stoffen & PBM’s', constatering:'Weinig risicovolle werkzaamheden op kantoor.', advies:'Geen actie; aandachtspunt houden.'},
+        {onderwerp:'Keuringen arbeidsmiddelen (NEN 3140) & gereedschappen', constatering:'Keuringen conform NEN 3140; leveranciersoverzicht aanwezig.', advies:'Continueren en borgen.'},
+        {onderwerp:'BHV‑organisatie & veiligheid / noodvoorzieningen', constatering:'Voldoende BHV; jaarlijkse oefening; bevindingen: noodverlichting/‑deur/blusser/ trapmarkering.', advies:'Reparaties uitvoeren; nooddeuren vrijhouden; blusser ophangen; trapje markeren.'},
+        {onderwerp:'Algemene voorzieningen & onderhoud', constatering:'Voorzieningen op orde; storingen snel verholpen.', advies:'Continueren.'},
+        {onderwerp:'Sanitair', constatering:'Voldoende, gescheiden voorzieningen.', advies:'Continueren.'},
+        {onderwerp:'Pauzeruimtes', constatering:'Voldoende ruimte; wordt gebruikt.', advies:'Continueren.'},
+        {onderwerp:'Schoonmaak en hygiëne', constatering:'Geen knelpunten.', advies:'Continueren.'},
+        {onderwerp:'Legionella (biologische agentia)', constatering:'Geen knelpunten.', advies:'Continueren.'},
+        {onderwerp:'Biologische agentia (overig)', constatering:'Geen knelpunten.', advies:'Continueren.'},
+        {onderwerp:'Verlichting', constatering:'Voldoet aan normen; geen knelpunten.', advies:'Continueren.'},
+        {onderwerp:'Zonwering', constatering:'Aanwezig en toereikend.', advies:'Continueren.'},
+        {onderwerp:'Werk- en rusttijden', constatering:'Vastgelegd en bekend.', advies:'Continueren.'},
+        {onderwerp:'Klimaat: ventilatie/tocht/luchtvochtigheid/temperatuur', constatering:'Combinatie HVAC; geen extreme situaties/klachten.', advies:'Continueren; onderhoud borgen.'},
+        {onderwerp:'Hinderlijk/schadelijk geluid', constatering:'Geen hinderlijke niveaus; printers op kantoren aanwezig.', advies:'Plaats printers bij voorkeur buiten kantoren (zie tonerstof).'},
+        {onderwerp:'Fysieke belasting', constatering:'Overwegend zittend werk; buitenwerk wisselend.', advies:'Afwisseling houding/werk stimuleren.'},
+        {onderwerp:'Beeldschermwerk (KANS/RSI) & vrije werkruimte', constatering:'>2u/dag VDU; bureaus lastig instelbaar; rommelige bekabeling (struikelgevaar).', advies:'Werkplekrondes; instelbare bureaus; kabelmanagement.'},
+        {onderwerp:'Register gevaarlijke stoffen', constatering:'Incidenteel gebruik (reinigers/toners); registratie ontbreekt.', advies:'Registreer aanwezige stoffen.'},
+        {onderwerp:'Veiligheidsinformatiebladen (VIB)', constatering:'VIB’s niet aangetroffen op werkplek.', advies:'VIB’s opvragen en beschikbaar stellen.'},
+        {onderwerp:'Opslag gevaarlijke stoffen & tonerstof/printers', constatering:'Reiniger bij levensmiddelen; printers verspreid over kantoren.', advies:'Gescheiden opslag; printerruimte of filters/afstand.'},
+        {onderwerp:'Psychosociale arbeidsbelasting (PSA)', constatering:'Onderwerpen periodiek bespreken; tevredenheidsonderzoek.', advies:'PSA‑thema’s borgen in HR‑gesprekken/overleg.'},
+        {onderwerp:'Functie-inhoud en werkafstemming', constatering:'Zelfstandigheid en samenwerking goed.', advies:'Continueren.'},
+        {onderwerp:'Arbeidsomstandigheden (algemeen)', constatering:'Geen knelpunten genoemd.', advies:'Continueren.'},
+        {onderwerp:'Emotionele belasting', constatering:'Geen knelpunten.', advies:'Continueren.'},
+        {onderwerp:'Ontwikkeling', constatering:'Gestructureerde F-gesprekken; scholing mogelijk.', advies:'Continueren.'},
+        {onderwerp:'Communicatie en overleg', constatering:'Voldoende tijd; veel zelfstandigheid.', advies:'Continueren.'},
+        {onderwerp:'Leiding', constatering:'Geen knelpunten.', advies:'Continueren.'},
+        {onderwerp:'Tevredenheid met werk en organisatie', constatering:'Medewerkers tevreden.', advies:'Continueren.'},
+      ];
+      window.H7_TOPICS = H7_TOPICS;
+    }
+
+    (function bindH7(){
+      const btn = document.getElementById('import-h7');
+      if (btn && !btn.dataset.bound) {
+        btn.dataset.bound = '1';
+        btn.addEventListener('click', ()=>{
+          if ($$('#rie-body tr').length && !confirm('Hoofdstuk 7 onderwerpen toevoegen onder bestaande regels?')) return;
+          window.H7_TOPICS.forEach(topic => addRow(topic));
+        });
+      }
+    })();
   </script>
 </body>
 </html>
