@@ -1,0 +1,490 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>RI&E Kantoren – Invultemplate</title>
+  <style>
+    :root {
+      --bg: #f7f7fb;
+      --card: #ffffff;
+      --text: #1f2937;
+      --muted: #6b7280;
+      --primary: #2563eb;
+      --border: #e5e7eb;
+      --green: #22c55e;
+      --yellow: #f59e0b;
+      --orange: #f97316;
+      --red: #ef4444;
+      --amber: #fbbf24;
+      --rose: #f43f5e;
+    }
+    * { box-sizing: border-box; }
+    html, body { margin:0; background: var(--bg); color: var(--text); font: 14px/1.5 Inter, system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif; }
+    header { position: sticky; top:0; z-index: 20; background: linear-gradient(180deg, #fff, rgba(255,255,255,0.94)); border-bottom: 1px solid var(--border); }
+    .wrap { max-width: 1080px; margin: 0 auto; padding: 16px; }
+    h1 { font-size: 22px; margin: 0; }
+    .actions { display:flex; gap:8px; flex-wrap:wrap; }
+    button, .btn { appearance:none; background: var(--primary); color:#fff; border:1px solid var(--primary); padding:10px 14px; border-radius:10px; cursor:pointer; font-weight:600; }
+    button.secondary, .btn.secondary { background:#fff; color:var(--text); border-color: var(--border); }
+    button.ghost { background:transparent; border-color:transparent; color: var(--primary); text-decoration: underline; }
+    main { padding: 20px 0 80px; }
+    section { background: var(--card); border:1px solid var(--border); border-radius: 14px; padding: 16px; margin: 14px 0; box-shadow: 0 1px 1px rgba(0,0,0,0.04); }
+    section h2 { margin:0 0 8px; font-size: 18px; }
+    .grid-2 { display:grid; grid-template-columns: 1fr 1fr; gap:12px; }
+    .grid-3 { display:grid; grid-template-columns: repeat(3, 1fr); gap:12px; }
+    label { display:block; font-weight:600; font-size: 12px; color:var(--muted); margin-bottom: 6px; }
+    input[type="text"], input[type="date"], input[type="number"], textarea, select { width: 100%; padding:10px 12px; border:1px solid var(--border); border-radius:10px; background:#fff; }
+    textarea { min-height: 110px; resize: vertical; }
+    table { width: 100%; border-collapse: collapse; }
+    th, td { border-top: 1px solid var(--border); padding:8px 10px; vertical-align: top; }
+    th { text-align:left; background:#fafafa; font-size: 12px; color: var(--muted); }
+    tr:hover td { background:#fafcff; }
+    .table-actions { display:flex; gap:6px; }
+    .pill { display:inline-block; padding: 2px 8px; border-radius: 999px; font-size: 12px; font-weight:700; }
+    .L { background:#e8f7ee; color:#0f5132; }
+    .M { background:#fff7e6; color:#7a5400; }
+    .H { background:#fee4e2; color:#7f1d1d; }
+    .X { background:#ffe4ec; color:#6b1224; }
+    .matrix { overflow:auto; }
+    .matrix table th, .matrix table td { text-align:center; }
+    .muted { color: var(--muted); font-size: 12px; }
+    .narrow { max-width: 860px; }
+    .mono { font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace; }
+    .note { border-left: 4px solid var(--primary); padding: 8px 12px; background: #f3f7ff; border-radius: 8px; }
+    .danger { color: var(--red); }
+    .kbd { border:1px solid var(--border); padding: 1px 6px; border-radius:6px; background:#fff; font-family: ui-monospace, monospace; }
+    footer { margin: 24px 0 80px; color:var(--muted); font-size:12px; text-align:center; }
+
+    /* print */
+    @media print {
+      header, .no-print { display:none !important; }
+      body { background:#fff; }
+      section { page-break-inside: avoid; }
+      .wrap { max-width: 100%; }
+      th, td { border: 1px solid #ddd; }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="wrap" style="display:flex; align-items:center; justify-content:space-between; gap:16px;">
+      <h1>RI&E Kantoren – Invultemplate</h1>
+      <div class="actions no-print">
+        <button id="btn-save">Opslaan (JSON)</button>
+        <button class="secondary" id="btn-load">Laden</button>
+        <button class="secondary" id="btn-export-csv">Exporteer CSV</button>
+        <button class="secondary" onclick="window.print()">Print / PDF</button>
+        <button class="ghost" id="btn-reset">Leeg maken</button>
+      </div>
+    </div>
+  </header>
+
+  <main class="wrap">
+    <!-- 1. Algemene Gegevens -->
+    <section>
+      <h2>1. Algemene Gegevens</h2>
+      <div class="grid-3">
+        <div>
+          <label>Uitgevoerd voor</label>
+          <input name="org" type="text" placeholder="Bedrijfsnaam" />
+        </div>
+        <div>
+          <label>Contactpersoon</label>
+          <input name="contact" type="text" />
+        </div>
+        <div>
+          <label>Datum</label>
+          <input name="datum" type="date" />
+        </div>
+        <div>
+          <label>Bezoekadres</label>
+          <input name="adres" type="text" />
+        </div>
+        <div>
+          <label>Telefoon</label>
+          <input name="tel" type="text" />
+        </div>
+        <div>
+          <label>E‑mail</label>
+          <input name="email" type="text" />
+        </div>
+      </div>
+    </section>
+
+    <!-- 2. Inleiding -->
+    <section class="narrow">
+      <h2>2. Inleiding</h2>
+      <p class="muted">Korte toelichting (Arbowet art. 5, doel en scope RI&E).</p>
+      <textarea name="inleiding" placeholder="Schrijf hier de inleiding…"></textarea>
+    </section>
+
+    <!-- 3. Methodiek -->
+    <section class="narrow">
+      <h2>3. Methodiek van onderzoek en verantwoording</h2>
+      <textarea name="methodiek" placeholder="Interview, documentreview, rondgang; gebruikte bronnen (RI&E Kantoren, AI‑bladen, NEN, etc.)"></textarea>
+    </section>
+
+    <!-- 4. Algemene informatie -->
+    <section>
+      <h2>4. Algemene Informatie op organisatieniveau</h2>
+      <textarea name="orginfo" placeholder="Populatie, leeftijdsopbouw, contractsoorten, verzuim, OR/PVT, risicogroepen, etc."></textarea>
+    </section>
+
+    <!-- 5. Toelichting score & keuzetabellen -->
+    <section>
+      <h2>5. Risicoscore & keuzetabellen</h2>
+      <div class="grid-3">
+        <div>
+          <label>Waarschijnlijkheid (W)</label>
+          <div class="muted">volgens Kinney & Wiruth</div>
+          <ul class="muted">
+            <li>10 – te verwachten</li>
+            <li>6 – zeer wel mogelijk</li>
+            <li>3 – ongewoon maar mogelijk</li>
+            <li>1 – onwaarschijnlijk (grensgeval)</li>
+            <li>0.5 – denkbaar, maar onwaarschijnlijk</li>
+            <li>0.2 – praktisch onmogelijk</li>
+            <li>0.1 – bijna niet denkbaar</li>
+          </ul>
+        </div>
+        <div>
+          <label>Blootstelling (B)</label>
+          <ul class="muted">
+            <li>10 – voortdurend</li>
+            <li>6 – dagelijks</li>
+            <li>3 – wekelijks/incidenteel</li>
+            <li>2 – soms/maandelijks</li>
+            <li>1 – enkele uren/jaar</li>
+            <li>0.5 – zeer zelden</li>
+          </ul>
+        </div>
+        <div>
+          <label>Effect (E)</label>
+          <ul class="muted">
+            <li>40 – ramp, verscheidene doden</li>
+            <li>15 – zeer ernstig, 1 dode</li>
+            <li>7 – ernstig, blijvend letsel</li>
+            <li>3 – belangrijk letsel met verzuim</li>
+            <li>1 – gering letsel / hinder</li>
+          </ul>
+        </div>
+      </div>
+      <p class="note">Risicoformule: <span class="mono">R = W × B × E</span>. Indeling: <b>Laag</b> (R &lt; 70), <b>Middel</b> (70 ≤ R &lt; 200), <b>Hoog</b> (200 ≤ R &lt; 400), <b>Zeer hoog</b> (R ≥ 400).
+        Voor wettelijke/beleidsmatige onderwerpen kun je ook W1/W2/W3 of B1/B2/B3 gebruiken (klassering zonder rekenscore).
+      </p>
+    </section>
+
+    <!-- 6. Resultaten inventarisatie & evaluatie (tabel) -->
+    <section>
+      <h2>6. Resultaten inventarisatie & evaluatie</h2>
+      <div class="table-actions no-print" style="margin:6px 0;">
+        <button id="add-row">+ Regel toevoegen</button>
+        <button class="secondary" id="import-rows">Voorbeeldonderwerpen laden</button>
+      </div>
+      <div style="overflow:auto;">
+        <table id="rie-table">
+          <thead>
+            <tr>
+              <th style="width:44px;">#</th>
+              <th style="min-width:200px;">Onderwerp</th>
+              <th>Constatering / Risico / Knelpunt</th>
+              <th style="width:120px;">W</th>
+              <th style="width:120px;">B</th>
+              <th style="width:120px;">E</th>
+              <th style="width:110px;">R</th>
+              <th style="width:120px;">Klasse</th>
+              <th style="width:220px;">Advies / maatregel</th>
+              <th style="width:90px;">Verantw.</th>
+              <th style="width:120px;">Gereed (datum)</th>
+              <th class="no-print" style="width:110px;">Acties</th>
+            </tr>
+          </thead>
+          <tbody id="rie-body"></tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- 7. Plan van aanpak (compacte weergave) -->
+    <section>
+      <h2>7. Plan van Aanpak (overzicht)</h2>
+      <p class="muted">Alle regels met een maatregel worden hier compact getoond.</p>
+      <div style="overflow:auto;">
+        <table id="pva-table">
+          <thead>
+            <tr>
+              <th>Knelpunt</th>
+              <th>Maatregel</th>
+              <th>Verantwoordelijke</th>
+              <th>Datum gereed</th>
+              <th>R / Klasse</th>
+            </tr>
+          </thead>
+          <tbody id="pva-body"></tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- 8. Toelichting risicoscore -->
+    <section class="narrow">
+      <h2>8. Toelichting risicoscore</h2>
+      <textarea name="toelichting" placeholder="Eventuele toelichting op keuzes, aannames en randvoorwaarden."></textarea>
+    </section>
+
+    <!-- 9. Bijlagen -->
+    <section class="narrow">
+      <h2>9. Bijlagen</h2>
+      <textarea name="bijlagen" placeholder="Bijlagenoverzicht (PMO, VIB’s, keuringen, foto’s, notulen, etc.)"></textarea>
+    </section>
+
+    <footer class="muted">© <span id="year"></span> – RI&E Kantoren invultemplate. Bewaar lokaal met JSON en publiceer via GitHub Pages.</footer>
+  </main>
+
+  <input class="no-print" id="file-input" type="file" accept="application/json" style="display:none" />
+
+  <script>
+    const $ = (sel, el=document) => el.querySelector(sel);
+    const $$ = (sel, el=document) => Array.from(el.querySelectorAll(sel));
+
+    const yearEl = document.getElementById('year');
+    yearEl.textContent = new Date().getFullYear();
+
+    const body = document.getElementById('rie-body');
+    const pvaBody = document.getElementById('pva-body');
+
+    const W_OPTIONS = [10, 6, 3, 1, 0.5, 0.2, 0.1];
+    const B_OPTIONS = [10, 6, 3, 2, 1, 0.5];
+    const E_OPTIONS = [40, 15, 7, 3, 1];
+
+    function createSelect(opts, placeholder) {
+      const sel = document.createElement('select');
+      sel.innerHTML = `<option value="">–</option>` + opts.map(v => `<option value="${v}">${v}</option>`).join('');
+      sel.title = placeholder || '';
+      return sel;
+    }
+
+    function riskClass(R) {
+      if (R === '' || isNaN(R)) return '';
+      const r = Number(R);
+      if (r >= 400) return 'X';
+      if (r >= 200) return 'H';
+      if (r >= 70) return 'M';
+      return 'L';
+    }
+
+    function classLabel(c) {
+      return (
+        c === 'X' ? 'Zeer hoog' :
+        c === 'H' ? 'Hoog' :
+        c === 'M' ? 'Middel' :
+        c === 'L' ? 'Laag' : ''
+      );
+    }
+
+    function classColor(c) {
+      return (
+        c === 'X' ? '#ffd5dd' :
+        c === 'H' ? '#ffe8e5' :
+        c === 'M' ? '#fff6e5' :
+        c === 'L' ? '#eaf8ef' : 'transparent'
+      );
+    }
+
+    function rowTemplate(idx, data={}) {
+      const tr = document.createElement('tr');
+      tr.dataset.idx = idx;
+      tr.innerHTML = `
+        <td class="mono">${idx+1}</td>
+        <td><input type="text" value="${data.onderwerp||''}" placeholder="Bijv. Beeldschermwerk" /></td>
+        <td><textarea placeholder="Constatering / risico / knelpunt">${data.constatering||''}</textarea></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td class="mono" data-r></td>
+        <td data-kl></td>
+        <td><textarea placeholder="Advies / maatregel">${data.advies||''}</textarea></td>
+        <td><input type="text" value="${data.verantw||''}" placeholder="Naam" /></td>
+        <td><input type="date" value="${data.gereed||''}" /></td>
+        <td class="no-print">
+          <div class="table-actions">
+            <button class="secondary" data-up>↑</button>
+            <button class="secondary" data-down>↓</button>
+            <button class="secondary" data-dup>Dup</button>
+            <button class="danger btn" data-del>Verwijder</button>
+          </div>
+        </td>`;
+
+      const wSel = createSelect(W_OPTIONS, 'Waarschijnlijkheid (W)');
+      const bSel = createSelect(B_OPTIONS, 'Blootstelling (B)');
+      const eSel = createSelect(E_OPTIONS, 'Effect (E)');
+      wSel.value = data.W ?? '';
+      bSel.value = data.B ?? '';
+      eSel.value = data.E ?? '';
+      tr.children[3].appendChild(wSel);
+      tr.children[4].appendChild(bSel);
+      tr.children[5].appendChild(eSel);
+
+      const recalc = () => {
+        const W = parseFloat(wSel.value);
+        const B = parseFloat(bSel.value);
+        const E = parseFloat(eSel.value);
+        const R = (isFinite(W) && isFinite(B) && isFinite(E)) ? (W*B*E) : '';
+        const cellR = tr.querySelector('[data-r]');
+        const cellK = tr.querySelector('[data-kl]');
+        cellR.textContent = R === '' ? '' : Math.round(R);
+        const c = riskClass(R);
+        cellK.innerHTML = c ? `<span class="pill ${c}">${classLabel(c)}</span>` : '';
+        tr.style.background = classColor(c);
+        refreshPVA();
+      };
+      [wSel,bSel,eSel].forEach(el => el.addEventListener('change', recalc));
+      recalc();
+
+      tr.querySelector('[data-up]').onclick = () => moveRow(tr, -1);
+      tr.querySelector('[data-down]').onclick = () => moveRow(tr, 1);
+      tr.querySelector('[data-dup]').onclick = () => duplicateRow(tr);
+      tr.querySelector('[data-del]').onclick = () => { tr.remove(); reindex(); refreshPVA(); };
+
+      return tr;
+    }
+
+    function addRow(data={}) {
+      const tr = rowTemplate($$('#rie-body tr').length, data);
+      body.appendChild(tr);
+      reindex();
+    }
+
+    function duplicateRow(tr) {
+      const idx = Number(tr.dataset.idx);
+      const data = serializeRow(tr);
+      addRow(data);
+      moveRow(body.lastElementChild, 1e6);
+    }
+
+    function moveRow(tr, dir) {
+      const rows = $$('#rie-body tr');
+      const idx = rows.indexOf(tr);
+      const target = Math.max(0, Math.min(rows.length-1, idx+dir));
+      if (idx === target) return;
+      body.insertBefore(tr, dir>0 ? rows[target].nextSibling : rows[target]);
+      reindex();
+    }
+
+    function reindex() { $$('#rie-body tr').forEach((tr,i)=>{ tr.dataset.idx=i; tr.children[0].textContent = i+1; }); }
+
+    function serializeRow(tr){
+      const [n,onderwerp,constatering,w,b,e,r,kl,advies,verantw,gereed] = tr.children;
+      const getVal = (td) => td.querySelector('input,textarea,select')?.value || '';
+      return {
+        onderwerp: getVal(onderwerp),
+        constatering: getVal(constatering),
+        W: getVal(w), B: getVal(b), E: getVal(e),
+        R: r.textContent || '',
+        klasse: kl.textContent || '',
+        advies: getVal(advies),
+        verantw: getVal(verantw),
+        gereed: getVal(gereed)
+      };
+    }
+
+    function serializeAll(){
+      const rows = $$('#rie-body tr').map(serializeRow);
+      const fields = $$('input[name], textarea[name], select[name]').reduce((acc,el)=>{ acc[el.name]=el.value; return acc; },{});
+      return { meta: fields, rows };
+    }
+
+    function loadData(obj){
+      // meta
+      Object.entries(obj.meta||{}).forEach(([k,v])=>{ const el=$(`[name="${k}"]`); if(el) el.value=v; });
+      // rows
+      body.innerHTML='';
+      (obj.rows||[]).forEach(r=> addRow(r));
+      refreshPVA();
+    }
+
+    function download(filename, data) {
+      const blob = new Blob([data], {type:'application/json'});
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url; a.download = filename; a.click();
+      URL.revokeObjectURL(url);
+    }
+
+    function toCSV(){
+      const headers = ['#','Onderwerp','Constatering','W','B','E','R','Klasse','Maatregel','Verantw','Gereed'];
+      const lines = [headers.join(';')];
+      $$('#rie-body tr').forEach((tr,i)=>{
+        const d = serializeRow(tr);
+        lines.push([i+1,d.onderwerp,d.constatering,d.W,d.B,d.E,d.R,stripHtml(d.klasse),d.advies,d.verantw,d.gereed].map(s=>`"${String(s||'').replace(/"/g,'""')}"`).join(';'));
+      });
+      return lines.join('\n');
+    }
+
+    function stripHtml(html){ const div=document.createElement('div'); div.innerHTML=html; return div.textContent||''; }
+
+    function refreshPVA(){
+      pvaBody.innerHTML = '';
+      $$('#rie-body tr').forEach(tr=>{
+        const d = serializeRow(tr);
+        if ((d.advies||'').trim().length){
+          const row = document.createElement('tr');
+          const clsText = stripHtml(d.klasse);
+          row.innerHTML = `
+            <td>${(d.constatering||'').slice(0,140)}</td>
+            <td>${d.advies||''}</td>
+            <td>${d.verantw||''}</td>
+            <td>${d.gereed||''}</td>
+            <td class="mono">${d.R||''} ${clsText?`<span class="pill ${clsCode(clsText)}">${clsText}</span>`:''}</td>`;
+          pvaBody.appendChild(row);
+        }
+      });
+    }
+
+    function clsCode(text){
+      return text.includes('Zeer')?'X':text.includes('Hoog')?'H':text.includes('Middel')?'M':'L';
+    }
+
+    // Buttons
+    document.getElementById('add-row').onclick = ()=> addRow();
+
+    document.getElementById('btn-save').onclick = ()=>{
+      download(`rie-kantoren-${new Date().toISOString().slice(0,10)}.json`, JSON.stringify(serializeAll(), null, 2));
+    };
+
+    document.getElementById('btn-load').onclick = ()=> $('#file-input').click();
+    document.getElementById('file-input').addEventListener('change', (e)=>{
+      const f=e.target.files[0]; if(!f) return; const r=new FileReader();
+      r.onload = ()=>{ try{ const obj=JSON.parse(r.result); loadData(obj);} catch(err){ alert('Kon JSON niet lezen.'); } };
+      r.readAsText(f);
+      e.target.value='';
+    });
+
+    document.getElementById('btn-export-csv').onclick = ()=>{
+      const blob = new Blob([toCSV()], {type:'text/csv;charset=utf-8'});
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a'); a.href=url; a.download='rie-kantoren.csv'; a.click(); URL.revokeObjectURL(url);
+    };
+
+    document.getElementById('btn-reset').onclick = ()=>{
+      if(confirm('Alles wissen?')){ body.innerHTML=''; pvaBody.innerHTML=''; }
+    };
+
+    // Example subjects aligned to RI&E Kantoren (verkort)
+    const EXAMPLES = [
+      { onderwerp:'Arbobeleid & organisatie', constatering:'Plan van aanpak ontbreekt/te actualiseren (wettelijke verplichting).', advies:'Actualiseer PvA en betrek OR/PVT.', W:'', B:'', E:'' },
+      { onderwerp:'BHV & noodvoorzieningen', constatering:'Pictogram noodverlichting defect; nooddeur tijdelijk geblokkeerd.', advies:'Repareren en vrijhouden noodroutes.', W:3, B:3, E:7 },
+      { onderwerp:'Beeldschermwerk', constatering:'Langdurig VDU-werk; kabels rommelig (struikelgevaar).', advies:'Werkplekinstellingen checken en kabelmanagement toepassen.', W:3, B:6, E:3 },
+      { onderwerp:'Printerruimte / tonerstof', constatering:'Meerdere printers in kantoorruimte.', advies:'Plaats printers in aparte ruimte of met filters en goede ventilatie.', W:1, B:3, E:1 },
+      { onderwerp:'Gevaarlijke stoffen (reinigers)', constatering:'Opslag reiniger nabij levensmiddelen.', advies:'Gescheiden, gelabelde opslag; VIB’s beschikbaar.', W:1, B:2, E:3 },
+    ];
+
+    document.getElementById('import-rows').onclick = ()=>{
+      if ($$('#rie-body tr').length && !confirm('Voorbeelden toevoegen onder bestaande regels?')) return;
+      EXAMPLES.forEach(addRow);
+    };
+
+    // Start with one empty row
+    addRow();
+  </script>
+</body>
+</html>
